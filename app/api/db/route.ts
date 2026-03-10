@@ -61,7 +61,7 @@ export async function PATCH(req: NextRequest) {
     itemAny[field] = value ? encodeLink(value) : ''
   } else if (field === 'tags') {
     item.tags = Array.isArray(value) ? value : value.split(',').map((s: string) => s.trim()).filter(Boolean)
-    item.tag_added_at = item.tags.length ? new Date().toISOString() : undefined
+    item.tag_added_at = (item.tags ?? []).length ? new Date().toISOString() : undefined
   } else if (field === 'genre') {
     item.genre = typeof value === 'string' ? value.split(',').map((s: string) => s.trim()) : value
   } else {
