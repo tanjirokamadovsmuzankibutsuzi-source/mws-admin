@@ -3,7 +3,7 @@
 export interface DbItem {
   uid: string; name: string; title?: string; year?: string; type?: string
   tmdb_id?: string; imdb_id?: string; backdrop?: string; genre?: string[]
-  rating?: string; size: string; audio: string; hub: string; gdf: string
+  rating?: string; size: string; audio?: string; langs?: string; hub: string; gdf: string
   custom_buttons?: { text: string; url: string }[]
   tags?: string[]; tag_added_at?: string; is_new?: boolean
   uploader_id: string; created_at: string; modified_at: string
