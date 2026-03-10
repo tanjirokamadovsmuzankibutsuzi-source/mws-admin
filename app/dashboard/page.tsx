@@ -220,7 +220,7 @@ function PostTab({ toast, role: _r, username: _u }: { toast: (m:string,t?:Toast[
           {result.meta?.title && (
             <div className="flex items-center gap-3 bg-[#0A0A0F] rounded-xl p-2.5">
               {result.meta?.backdrop && <img src={result.meta.backdrop} alt="" className="w-12 h-7 object-cover rounded-lg shrink-0" />}
-              <div><p className="text-white text-xs font-medium">{result.meta.title}</p><p className="text-[#6B6B80] text-xs">{result.meta.year}</p></div>
+              <div><p className="text-white text-xs font-medium">{result.meta?.title ?? ''}</p><p className="text-[#6B6B80] text-xs">{result.meta?.year ?? ''}</p></div>
             </div>
           )}
           {result.broadcast && <p className="text-[#6B6B80] text-xs mt-2">📢 {result.broadcast.success}/{result.broadcast.total} channels</p>}
@@ -263,14 +263,19 @@ function PostTab({ toast, role: _r, username: _u }: { toast: (m:string,t?:Toast[
 }
 
 function TelegramPreview({ meta, files }: { meta:Record<string,unknown>; files:Record<string,unknown>[] }) {
+  const title = meta.title as string | undefined
+  const year = meta.year as string | undefined
+  const rating = meta.rating as string | undefined
+  const genres = meta.genres as string | undefined
+  const backdrop = meta.backdrop as string | undefined
   return (
     <div className="bg-[#17212B] rounded-2xl overflow-hidden text-white max-w-sm mx-auto">
-      {(meta.backdrop as string) && <img src={meta.backdrop as string} alt="" className="w-full h-40 object-cover" />}
+      {backdrop && <img src={backdrop} alt="" className="w-full h-40 object-cover" />}
       <div className="p-4 text-sm">
-        {(meta.title as string) ? (
+        {title ? (
           <>
-            <p className="font-bold text-base">{meta.title as string} {meta.year && `(${meta.year})`}</p>
-            {(meta.rating as string) && <p className="text-yellow-400 text-xs mt-1">⭐️ {meta.rating as string}/10 {(meta.genres as string) && `| 🎭 ${meta.genres}`}</p>}
+            <p className="font-bold text-base">{title}{year ? ` (${year})` : ''}</p>
+            {rating && <p className="text-yellow-400 text-xs mt-1">⭐️ {rating}/10{genres ? ` | 🎭 ${genres}` : ''}</p>}
             <div className="border-t border-white/10 my-2" />
           </>
         ) : <p className="font-bold">⌬ New Upload</p>}
@@ -287,11 +292,20 @@ function TelegramPreview({ meta, files }: { meta:Record<string,unknown>; files:R
 }
 
 function WebPreview({ meta, files }: { meta:Record<string,unknown>; files:Record<string,unknown>[] }) {
+  const title = meta.title as string | undefined
+  const year = meta.year as string | undefined
+  const rating = meta.rating as string | undefined
+  const backdrop = meta.backdrop as string | undefined
   return (
     <div className="glass rounded-2xl overflow-hidden">
-      {(meta.backdrop as string) && <img src={meta.backdrop as string} alt="" className="w-full h-36 object-cover" />}
+      {backdrop && <img src={backdrop} alt="" className="w-full h-36 object-cover" />}
       <div className="p-4">
-        {(meta.title as string) && <div className="mb-3"><h2 className="text-white font-bold text-lg">{meta.title as string} {meta.year && <span className="text-[#6B6B80] text-sm">({meta.year as string})</span>}</h2>{(meta.rating as string) && <p className="text-yellow-400 text-sm">⭐ {meta.rating as string}/10</p>}</div>}
+        {title && (
+          <div className="mb-3">
+            <h2 className="text-white font-bold text-lg">{title}{year ? <span className="text-[#6B6B80] text-sm"> ({year})</span> : ''}</h2>
+            {rating && <p className="text-yellow-400 text-sm">⭐ {rating}/10</p>}
+          </div>
+        )}
         {(files as Record<string,string>[]).map((f,i) => (
           <div key={i} className="bg-[#0A0A0F] rounded-xl p-3 mb-2">
             <p className="text-white text-sm font-medium truncate">{f.name}</p>
